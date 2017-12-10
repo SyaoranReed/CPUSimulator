@@ -28,8 +28,8 @@ public class CPU {
 		
 	}
 	
-	public String fetchData(String address) {
-		return dataMemory.retrieve(address);
+	public String fetchData() {
+		return dataMemory.retrieve(A);
 	}
 	
 	public String fetchInstruction() {
@@ -53,7 +53,10 @@ public class CPU {
 			//in case a jump had to be executed.
 			String computation = compute(instruction.substring(3, 9));
 			destinate(instruction.substring(10, 12), computation);
-			jump(instruction.substring(13, 16));
+			if( jump(instruction.substring(13, 16), computation) ) 
+				PC = A; //Modifying PC register so it points to the next instruction.
+			else 
+				//PC++; //If a jump is not required, then continue with the next instruction.
 			
 			
 		}
@@ -74,15 +77,40 @@ public class CPU {
 
 	//Determinates destination register where the computation is going to be stored.
 	private void destinate(String dBits, String computation) {
-		// TODO Auto-generated method stub
+		//dBits is a string with the format d1d2d3, where d1, d2 and d3 is associated with 
+		//A, D and M respectively .
+		
+		if(dBits.charAt(0) == '1') A = computation; 
+		if(dBits.charAt(1) == '1') D = computation;
+		if(dBits.charAt(2) == '1') dataMemory.write(computation, A);
 		
 	}
 	
-	//Determinates the jump condition and Modifies PC register so it points to the next instruction.
-	private void jump(String jBits) {
-		// TODO Auto-generated method stub
+	//Evaluates if a jump must be executed.
+	private boolean jump(String jBits, String computation) {
+		
+		//jBits is a string with the format j1j2j3, where j1, j2 and j3 are associated respectively with
+		//computation lesser, equal, and greater than zero conditions that need to be true for the jump to happen.
+		
+		boolean jump = false;
+		
+		int comp = Integer.parseInt(computation, 10); //Integer representation of the computation.
+		
+		if(jBits.equals("001") && comp > 0) jump = true; //JGT
+		else if(jBits.equals("010") && comp == 0) jump = true; //JEQ
+		else if(jBits.equals("011") && (comp > 0 || comp == 0) jump = true; //JGE
+		else if(jBits.equals("100") && comp < 0) jump = true; //JLT
+		else if(jBits.equals("101") && comp != 0) jump = true; //JNE
+		else if(jBits.equals("110") && (comp < 0 || comp == 0)) jump = true; //JLE
+		else if(jBits.equals("111")) jump = true; 
+		
+		
+		return jump;
+		
 		
 	}
+	
+	
 
 
 	
