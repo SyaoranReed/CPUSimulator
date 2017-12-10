@@ -3,7 +3,9 @@ package cpuSimulator;
 public class Binary {
 	
 	public static void main(String[] args) {
-		System.out.println(toBinaryString(4));
+		int number = -16383;
+		System.out.println(toBinaryString(number));
+		System.out.println(Integer.toBinaryString(number));
 	}
 	
 	/**
@@ -25,13 +27,13 @@ public class Binary {
 	}
 	
 	/**
-	 * Devuelve en un string value en binario (16bits)
+	 * Devuelve en un string value en binario (15bits)
 	 * @param value
 	 * @return
 	 */
 	public static String toBinaryString(int value){
 		String s = "";
-		for(int i= 15; i >= 0; i--){
+		for(int i= 14; i >= 0; i--){
 			if ((value & (1 << i)) != 0) {
 				s += 1;
 			}
