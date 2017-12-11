@@ -28,10 +28,11 @@ public class CPU {
 		
 	}
 	
-	public void startProgram() {
-		//Mientras queden instrucciones por ejecutar {
+	public void startProgram(int numberOfInstructions) {
+		
+		while(Binary.parseBinaryToInt(PC) < numberOfInstructions) {
 			stepForward();
-		//}
+		}
 		
 	}
 	
@@ -50,22 +51,30 @@ public class CPU {
 	
 	private void executeInstruction(String instruction) {
 		
-		if(instruction.charAt(0) == '0') //if it is an A-Instruction
-			A = instruction; //The instructions is interpreted as a 16-bit value and stored in A-register.
 		
+		if(instruction.charAt(0) == '0') { //if it is an A-Instruction
+			A = instruction; //The instructions is interpreted as a 16-bit value and stored in A-register.
+			PC = Binary.addBinaryNumbers(PC, "0000000000000001");
+		}
 		else if(instruction.charAt(0) == '1') { //if it is an C-Instruction
 			
 			//An C-instruction have this format 111a cccc ccdd djjj. Where acccccc it's needed to make the computation,
 			//the ddd to determinate the destination of the computation, and the jjj to determinate the jump condition
 			//in case a jump had to be executed.
-			String computation = compute(instruction.substring(3, 9));
-			destinate(instruction.substring(10, 12), computation);
-			if( jump(instruction.substring(13, 16), computation) ) 
+			
+			String comp = instruction.substring(3, 10);
+			String dest = instruction.substring(10, 13);
+			String jmp = instruction.substring(13, 16);
+			String computation = compute(comp);
+			
+			destinate(dest, computation);
+			String M = dataMemory.retrieve(A);
+			if( jump(jmp, computation) ) 
 				PC = A; //Modifying PC register so it points to the next instruction.
 			else 
 				PC = Binary.addBinaryNumbers(PC, "0000000000000001"); //If a jump is not required, then continue with the next instruction.(PC++)
 			
-			
+			System.out.println(M);
 		}
 	}
 
@@ -94,7 +103,7 @@ public class CPU {
 		
 		boolean jump = false;
 		
-		int comp = Integer.parseInt(computation, 10); //Integer representation of the computation.
+		int comp = Binary.parseBinaryToInt(computation); //Integer representation of the computation.
 		
 		if(jBits.equals("001") && comp > 0) jump = true; //JGT
 		else if(jBits.equals("010") && comp == 0) jump = true; //JEQ
