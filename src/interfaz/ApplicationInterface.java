@@ -14,6 +14,8 @@ public class ApplicationInterface extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("./MainInterface.fxml"));
 		Pane root = loader.load();
+		InterfaceController controller = loader.getController();
+		controller.setOwner(primaryStage);
 		Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(root.getPrefHeight());
