@@ -18,12 +18,19 @@ public class Main {
 		Memory instructionMemory = new Memory(memorySize);
 		Memory dataMemory= new Memory(memorySize);
 		
-		//Leer el archivo y almacenar el programa en la memoria de intrucciones.
+		
+		
+		
 		
 		CPU cpu = new CPU(instructionMemory, dataMemory);
-		cpu.startProgram();
-
+		
+		//cpu.startProgram(cantidadDeInstrucciones);
+		
+		
+		
+	    
 	}
+	
 	
 	public void loadInstruction(String pathname, Memory instructionMemory) throws IOException {
 		File file = new File(pathname);
@@ -43,5 +50,6 @@ public class Main {
 			throw new IOException("I/O error");
 		}
 	}
+
 
 }
