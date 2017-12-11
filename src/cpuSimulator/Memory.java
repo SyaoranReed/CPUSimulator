@@ -12,14 +12,14 @@ public class Memory {
 		
 		//Since an index of an array is integer type, the binary address
 		//must be converted to its integer value.
-		int memoryIndex = Integer.parseInt(address, 10); 
+		int memoryIndex = Binary.parseBinaryToInt(address);
 		
 		return memory[memoryIndex];
 	}
 	
 	//Writes a word to the memory location pointed by the address.
 	public void write(String word, String address) {
-		int memoryIndex = Integer.parseInt(address, 10); 
+		int memoryIndex = Binary.parseBinaryToInt(address);
 		memory[memoryIndex] = word;
 	}
 }

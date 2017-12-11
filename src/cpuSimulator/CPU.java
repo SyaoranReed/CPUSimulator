@@ -3,7 +3,7 @@ package cpuSimulator;
 
 public class CPU {
 	
-	final static String FIRST_INSTRUCTION_ADDRESS = "0000000000000000";
+	final static String DEFAULT_VALUE = "0000000000000000";
 	
 	//An A-instruction have this format 111a cccc ccdd djjj.
 	
@@ -13,11 +13,18 @@ public class CPU {
 	String D;
 	String PC;
 	Memory instructionMemory, dataMemory;
+	ALU alu;
 	
 	String programLines; //Binary representation of the number of lines of the program to execute.
 	
 	
 	public CPU(Memory instructionMemory, Memory dataMemory) {
+		this.instructionMemory = instructionMemory;
+		this.dataMemory = dataMemory;
+		PC = DEFAULT_VALUE;
+		A = DEFAULT_VALUE;
+		D = DEFAULT_VALUE;
+		alu = new ALU(this);
 		
 	}
 	
@@ -56,22 +63,15 @@ public class CPU {
 			if( jump(instruction.substring(13, 16), computation) ) 
 				PC = A; //Modifying PC register so it points to the next instruction.
 			else 
-				//PC++; //If a jump is not required, then continue with the next instruction.
+				PC = Binary.addBinaryNumbers(PC, "0000000000000001"); //If a jump is not required, then continue with the next instruction.(PC++)
 			
 			
 		}
 	}
 
-	//Determinates what type of computation has to be made.
-	private String compute(String cBits) {
-		
-		//Nota: En caso de transformar la computación con desde enteros a binario con el método Integer.toBinaryString()
-		//hay que concatenarle 0's en caso de que el número alcance a representarse con menos de 16 bits.
-		//por ejemplo, si transformamos 4 a binario, quedará un string "100", por lo que hay que agregarle 
-		//ceros a la izquierda para que queden 16 bits.
-		
-		String computation =  "hola";
-		return computation;
+	//Asks to the ALU to compute something.
+	private String compute(String acBits) {
+		return alu.compute(acBits);
 	}
 		
 
@@ -98,7 +98,7 @@ public class CPU {
 		
 		if(jBits.equals("001") && comp > 0) jump = true; //JGT
 		else if(jBits.equals("010") && comp == 0) jump = true; //JEQ
-		else if(jBits.equals("011") && (comp > 0 || comp == 0) jump = true; //JGE
+		else if(jBits.equals("011") && (comp > 0 || comp == 0)) jump = true; //JGE
 		else if(jBits.equals("100") && comp < 0) jump = true; //JLT
 		else if(jBits.equals("101") && comp != 0) jump = true; //JNE
 		else if(jBits.equals("110") && (comp < 0 || comp == 0)) jump = true; //JLE
