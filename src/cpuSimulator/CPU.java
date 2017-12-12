@@ -1,9 +1,10 @@
 package cpuSimulator;
 
+import java.util.Iterator;
 
 public class CPU {
 	
-	final static String DEFAULT_VALUE = "0000000000000000";
+	public final static String DEFAULT_VALUE = "0000000000000000";
 	
 	//An A-instruction have this format 111a cccc ccdd djjj.
 	
@@ -12,7 +13,7 @@ public class CPU {
 	//tamaño de la memoria es de solo 32K.
 	String D;
 	String PC;
-	Memory instructionMemory, dataMemory;
+	public Memory instructionMemory, dataMemory;
 	ALU alu;
 	
 	String programLines; //Binary representation of the number of lines of the program to execute.
@@ -118,9 +119,26 @@ public class CPU {
 		
 		
 	}
-	
-	
 
+	public String getA() {
+		return A;
+	}
 
+	public String getD() {
+		return D;
+	}
+
+	public String getPC() {
+		return PC;
+	}
+	
+	public Iterator<String> instructionIterator(){
+		return this.instructionMemory.iterator();
+	}
+	
+	public Iterator<String> memoryIterator(){
+		return this.dataMemory.iterator();
+	}
+	
 	
 }

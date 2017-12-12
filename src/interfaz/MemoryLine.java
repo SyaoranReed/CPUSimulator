@@ -4,13 +4,14 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class MemoryLine {
+	private static MemoryLine selected = null;
 	private StringProperty address;
-	private StringProperty instruction;
+	private StringProperty word;
 	private boolean isSelected;
 	
-	public MemoryLine(String address, String instruction) {
+	public MemoryLine(String address) {
 		this.address = new SimpleStringProperty(address);
-		this.instruction = new SimpleStringProperty(instruction);
+		this.word = new SimpleStringProperty("");
 		isSelected = false;
 	}
 
@@ -27,23 +28,30 @@ public class MemoryLine {
 	}
 	
 	 
-	public String getInstruction() {
-		return this.instruction.get();
+	public String getWord() {
+		return this.word.get();
 	}
 
-	public void setInstruction(String instruction) {
-		this.instruction.setValue(instruction);
+	public void setWord(String word) {
+		this.word.setValue(word);
 	}
 	
-	public StringProperty instructionProperty() {
-		return this.instruction;
+	public StringProperty wordProperty() {
+		return this.word;
 	}
 
 	public boolean isSelected() {
 		return isSelected;
 	}
 
-	public void changeState() {
-		this.isSelected = !isSelected;
+	public void setSelected(boolean state) {
+		MemoryLine.selected = this;
+		this.isSelected = state;
+	}
+	
+	public static void clearSelected() {
+		if (MemoryLine.selected != null) {
+			MemoryLine.selected.setSelected(false);
+		}
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -13,7 +14,7 @@ public class ApplicationInterface extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("./MainInterface.fxml"));
-		Pane root = loader.load();
+		AnchorPane root = loader.load();
 		InterfaceController controller = loader.getController();
 		controller.setOwner(primaryStage);
 		Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());

@@ -1,6 +1,10 @@
 package cpuSimulator;
 
-public class Memory {
+import java.util.Iterator;
+
+import javax.imageio.ImageTypeSpecifier;
+
+public class Memory implements Iterable<String> {
 
 	String[] memory;
 	public Memory(int size){
@@ -21,5 +25,28 @@ public class Memory {
 	public void write(String word, String address) {
 		int memoryIndex = Binary.parseBinaryToInt(address);
 		memory[memoryIndex] = word;
+	}
+	/**
+	 * 	Return a iterator to go over the values of the memory.
+	 */
+	@Override
+	public Iterator<String> iterator() {
+		return new Iterator() {
+			private int i=0;
+			@Override
+			public boolean hasNext() {
+				if (i < memory.length) {
+					return true;
+				}
+				return false;
+				
+			}
+
+			@Override
+			public Object next() {
+				return memory[i++];
+			}
+			
+		};
 	}
 }
