@@ -12,6 +12,8 @@ import javax.print.attribute.standard.RequestingUserName;
 import cpuSimulator.Binary;
 import cpuSimulator.CPU;
 import cpuSimulator.Program;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -20,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -68,9 +71,9 @@ public class InterfaceController {
 	@FXML
 	private void initialize() {
 		//Prepare instructionTable
-		TableColumn column1 = instructionTable.getColumns().get(0);
+		TableColumn<MemoryLine,String> column1 = (TableColumn<MemoryLine, String>) instructionTable.getColumns().get(0);
 		column1.setCellValueFactory(new PropertyValueFactory("address"));
-		TableColumn column2 = instructionTable.getColumns().get(1);
+		TableColumn<MemoryLine,String> column2 = (TableColumn<MemoryLine, String>) instructionTable.getColumns().get(1);
 		column2.setCellValueFactory(new PropertyValueFactory("word"));
 		setCellFactoryTableViewHighLine(column1);
 		setCellFactoryTableViewHighLine(column2);
@@ -78,11 +81,14 @@ public class InterfaceController {
 		fill(instructionTable);
 		
 		//Prepare dataTable
-		column1 = dataTable.getColumns().get(0);
+		column1 = (TableColumn<MemoryLine, String>) dataTable.getColumns().get(0);
 		column1.setCellValueFactory(new PropertyValueFactory("address"));
-		column2 = dataTable.getColumns().get(1);
+		column2 = (TableColumn<MemoryLine, String>) dataTable.getColumns().get(1);
 		setCellFactoryEditingCell(column2);
 		column2.setCellValueFactory(new PropertyValueFactory("word"));
+		TableColumn column3 = dataTable.getColumns().get(2);
+		column3.setCellValueFactory(new PropertyValueFactory("decimalWord"));
+		setCellFactoryEditingCell(column3);
 		dataTable.getSelectionModel().setCellSelectionEnabled(true);
 		fill(dataTable);
 	}
@@ -129,7 +135,9 @@ public class InterfaceController {
 				String newValue = event.getNewValue();
 				String binaryWord = Binary.parseDecimalStringToBinaryString(newValue);
 				String binaryAddress = Binary.parseDecimalStringToBinaryString(event.getRowValue().getAddress());
-				event.getRowValue().setWord(binaryFormat(binaryWord));
+				MemoryLine memoryLine = event.getRowValue();
+				memoryLine.setDecimalWord(newValue);
+				memoryLine.setWord(binaryFormat(binaryWord));
 				programCPU.dataMemory.write(binaryWord, binaryAddress);
 			}
 		});
@@ -168,6 +176,7 @@ public class InterfaceController {
 		else {
 			playButton.setDisable(false);
 			oneStepButton.setDisable(false);
+			dataTable.setDisable(false);
 		}
 		aRegField.setText(cpu.DEFAULT_VALUE);
 		dRegField.setText(cpu.DEFAULT_VALUE);
@@ -201,6 +210,7 @@ public class InterfaceController {
 		ObservableList<MemoryLine> observableList = memoryView.getItems();
 		for (MemoryLine memoryLine : observableList) {
 			memoryLine.setWord("");
+			memoryLine.setDecimalWord("");
 		}
 	}
 
@@ -224,10 +234,12 @@ public class InterfaceController {
 		MemoryLine line = instructionList.get(Binary.parseBinaryToInt(programCPU.getPC()));
 		
 		if(programCPU.dataMemory.retrieve(programCPU.getA()) != null) {
-			dataList.get(Binary.parseBinaryToInt(programCPU.getA())).setWord(programCPU.dataMemory.retrieve(programCPU.getA()));
+			String value = programCPU.dataMemory.retrieve(programCPU.getA());
+			MemoryLine dataLine = dataList.get(Binary.parseBinaryToInt(programCPU.getA()));
+			dataLine.setWord(value);
+			dataLine.setDecimalWord("" + Binary.parseBinaryToInt(value));
 		}
-		//Quita la seleccion a la instruccion anterior [Sirva para pintar el background]
-		
+		//Quita la seleccion a la instruccion anterior [Sirva para pintar el background]		
 		MemoryLine.clearSelected();
 		//Selecciona la instruccion que se ejecuto
 		line.setSelected(true);

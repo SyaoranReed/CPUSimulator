@@ -100,10 +100,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TableView fx:id="dataTable" editable="true" prefHeight="664.0" prefWidth="264.0" GridPane.columnIndex="1">
+                        <TableView fx:id="dataTable" disable="true" editable="true" prefHeight="664.0" prefWidth="264.0" GridPane.columnIndex="1">
                            <columns>
                               <TableColumn editable="false" prefWidth="66.0" sortable="false" text="Address" />
-                              <TableColumn prefWidth="197.0" sortable="false" text="Data" />
+                              <TableColumn prefWidth="125.0" sortable="false" text="Data Bin" />
+                              <TableColumn prefWidth="50.0" sortable="false" text="Data Dec" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

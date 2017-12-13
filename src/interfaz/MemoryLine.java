@@ -7,11 +7,13 @@ public class MemoryLine {
 	private static MemoryLine selected = null;
 	private StringProperty address;
 	private StringProperty word;
+	private StringProperty decimalWord;
 	private boolean isSelected;
 	
 	public MemoryLine(String address) {
 		this.address = new SimpleStringProperty(address);
 		this.word = new SimpleStringProperty("");
+		this.decimalWord = new SimpleStringProperty("");
 		isSelected = false;
 	}
 
@@ -38,6 +40,18 @@ public class MemoryLine {
 	
 	public StringProperty wordProperty() {
 		return this.word;
+	}
+	
+	public String getDecimalWord() {
+		return this.decimalWord.getValue();
+	}
+	
+	public void setDecimalWord(String value) {
+		decimalWord.set(value);
+	}
+	
+	public StringProperty decimalWordProperty() {
+		return decimalWord;
 	}
 
 	public boolean isSelected() {
