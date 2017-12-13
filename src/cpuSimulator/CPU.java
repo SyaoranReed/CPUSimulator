@@ -75,7 +75,6 @@ public class CPU {
 			else 
 				PC = Binary.addBinaryNumbers(PC, "0000000000000001"); //If a jump is not required, then continue with the next instruction.(PC++)
 			
-			System.out.println(M);
 		}
 	}
 

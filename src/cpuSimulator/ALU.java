@@ -142,9 +142,6 @@ public class ALU {
 				
 		}
 		
-		cpu.A = A;
-		cpu.D = D;
-		cpu.dataMemory.write(M, A);
 		
 		return computation; 
 		
