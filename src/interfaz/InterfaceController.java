@@ -84,7 +84,9 @@ public class InterfaceController {
 		column1 = (TableColumn<MemoryLine, String>) dataTable.getColumns().get(0);
 		column1.setCellValueFactory(new PropertyValueFactory("address"));
 		column2 = (TableColumn<MemoryLine, String>) dataTable.getColumns().get(1);
-		setCellFactoryEditingCell(column2);
+		/*setCellFactoryEditingCell(column2); Permite hacer doble click e ingresar el
+		valor desde la celda bin, pero el valor a ser ingresado debe ser en decimal asi 
+		que es lo mismo que ingresarlo en la comunda data dec*/
 		column2.setCellValueFactory(new PropertyValueFactory("word"));
 		TableColumn column3 = dataTable.getColumns().get(2);
 		column3.setCellValueFactory(new PropertyValueFactory("decimalWord"));
